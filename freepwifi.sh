@@ -15,23 +15,25 @@ echo "
 ─██░░██─────────██░░██──██░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██────██░░██─────────
 ─██████─────────██████──██████████─██████████████─██████████████────██████─────────
 ───────────────────────────────────────────────────────────────────────────────────
-
+				©Yada 2022
 "
-sleep 3
+sleep 1
 clear
 }
 
 banner
 echo "Welcome Freeloader To your Premium Lifestyle"
 echo "
-	[1] Scan users with internet
-	[2] Select user from [online.txt]
-	Select a number and write it below and hit Enter
-	[work in progress -- connect to public pay network then run script]
-		Built by Yada with Love
+	[1] Scan users with internet [◉]
+	[2] Select user from [online.txt] [◉]
+	[work in progress -- connect to public pay network then run script] [◉]
+		
 ..............................................................................
 "
-#echo ":" 
+Red='\033[1;31m'
+Yellow='\033[1;33m'   
+reset="\e[0m"
+echo -e "Enter ${Red}selected number${reset} and hit enter:"
 read action_1
 #echo "Enter the wifi name to exploit"
 #read wifiname_1
@@ -85,10 +87,10 @@ if [[ "$action_1" -eq 1 ]]; then
 		#ping -c3 google.com
 		wget -q --tries=10 --timeout=10 --spider https://google.com
 		if [[ "$?" -eq "0" ]]; then
-			echo "internet available"
+			echo "[✔] ${Red}Internet available${reset}"
 			echo "$user" >> /tmp/freep/online.txt
 		else
-			echo "no internet connection"
+			echo "[◉] ${Yellow}No internet connection${reset}"
 		fi
 	done < "$input"
 	echo "Continue with part 2 of the script and select an online point [y/n] "
