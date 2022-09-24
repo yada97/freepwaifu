@@ -1,5 +1,5 @@
 
-# FreepWifi
+# FreepWaifu
 
 Check for active internet connections on users of paid public wifi with this simple script to compile active internet connections to spoof. (refer to macspoofing)
 
