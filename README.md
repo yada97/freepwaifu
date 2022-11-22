@@ -25,7 +25,7 @@ Fly alien spaceship with
 * [macchanger](https://github.com/alobbs/macchanger)
 * [awk](https://github.com/onetrueawk/awk)
 * [iw](https://aur.archlinux.org/iw-git.git)
-N.b. Most of this tools are likely pre installed in your linux environment or
+* N.b. Most of this tools are likely pre installed in your linux environment or
 can be installed using your respective package manager apt/pacman/yum/dnf/snap etc
 
 ## Things to note
@@ -33,6 +33,7 @@ can be installed using your respective package manager apt/pacman/yum/dnf/snap e
 * when running watch the routing prompted 
     * if ping is going to the right gateway e.g 192.168.88.1/ or if no gateway --mac didn't ping succcessfully
 * Files are stored in /tmp/freep directory - You can manually acquire scans from there
+* You can adjust how fast pings occur by adjusting timeout and tries
 
 ## License
 
