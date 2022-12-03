@@ -97,8 +97,9 @@ scan_for_internet(){
 		sleep 5 
 		Routing_to=$(ip route show default | awk '/default/ {print $3}')
 		echo -e "${Yellow} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${Yellow} $Routing_to ${reset}"
-		wget -q --tries=2 --timeout=2 --spider google.com
-		if [[ "$?" -eq "0" ]]; then
+		#wget -q --tries=2 --timeout=2 --spider google.com
+		wget -q --spider google.com
+		if [[ $? -eq 0 ]]; then
 			echo -e "[✔] ${Yellow} Internet available ${reset}"
 			echo "$user" >> /tmp/freep/online.txt
 		else
