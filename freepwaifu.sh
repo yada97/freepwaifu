@@ -11,7 +11,7 @@ reset='\033[0m'
 #Dancing panda Variables
 export purple_panda='\033[6;35m'
 
-    #configuration files & data files
+#configuration files & data files
 online="online_users.txt"
 total_users="allusers.txt"
 complete_users="users.txt"
@@ -37,7 +37,6 @@ function drowsy_1 {
     local drunk=$1
     sleep ${drunk} 
 }
-
 epic="$purple_panda"
 banner "$epic" "＊ ＊ ＊ Loading ＊ ＊ ＊" 
 #Temporary file management written poorly but exists for some reason
@@ -50,7 +49,7 @@ if [[ -d $config_path ]]; then
         drowsy_1 "1"
     else
         drowsy_1 "1"
-        echo -e "[◉]${Yellow} Alien life not found ${reset}"
+        echo -e "[＊]${Yellow} Alien life not found ${reset}"
     fi
      if [[ -f $config_path/$complete_users ]]; then
         echo -e "[✔] ${Yellow} Found and killed alien life.. ${reset}"
@@ -58,7 +57,7 @@ if [[ -d $config_path ]]; then
         drowsy_1 "1"
     else
         drowsy_1 "1"
-        echo -e "[◉]${Yellow} Alien life not found ${reset}"
+        echo -e "[＊]${Yellow} Alien life not found ${reset}"
     fi
      if [[ -f $config_path/$online ]]; then
         echo -e "[✔] ${Yellow} Found cute alien , storing her... ${reset}"
@@ -67,7 +66,7 @@ if [[ -d $config_path ]]; then
         drowsy_1 "1"
     else
         drowsy_1 "1"
-        echo -e "[◉]${Yellow} Alien life not found ${reset}"
+        echo -e "[＊]${Yellow} Alien life not found ${reset}"
     fi
 else
     mkdir {"$config_path/","$previous_config_path/"}
@@ -80,10 +79,15 @@ get_interface(){
    interface=$(iw dev | awk '$1=="Interface"{print $2}') 
 }
 disable_wifi_iface(){
-    sudo ifconfig $interface down
+    #sudo ifconfig $interface down
+    nmcli radio wifi off
+    #nmcli d disconnect $interface &>/dev/null
+    
 }
 enable_wifi_iface(){
-    sudo ifconfig $interface up
+    #sudo ifconfig $interface up
+    nmcli radio wifi on
+    #nmcli d connect $interface &>/dev/null
 }
 select_point(){
     if [[ -f $previous_config_path/$online ]]; then
@@ -112,27 +116,38 @@ wifi_spoof_tool(){
     while IFS= read -r user
     do
         get_interface
-        disable_wifi_iface
-        drowsy_1 "1"
-        sudo macchanger --mac=${user} $interface &>/dev/null
-        drowsy_1 "1"
-        enable_wifi_iface
-	#sudo macchanger --show $interface
+        #disable_wifi_iface
+        nmcli radio wifi off
         drowsy_1 "3"
+        sudo macchanger -bm=${user} $interface &>/dev/null
+        drowsy_1 "3"
+        nmcli radio wifi on
+        #enable_wifi_iface
+        drowsy_1 "5"
         nmcli d wifi connect "${wifiname_1}" &>/dev/null
         drowsy_1 "5"
         Routing_to=$(ip route show default | awk '/default/ {print $3}')
-        echo -e "${Yellow} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${Yellow} $Routing_to ${reset}"
-		PING_TARGET="google.com"
-        	PING_RESULT=$(ping -c 1 "$PING_TARGET" 2>&1)
-        	#wget -q --tries=20 --timeout=10 --spider google.com
-		#wget -q --spider google.com
-		if [[ $? -eq 0 ]]; then
-			echo -e "[✔] ${Yellow} Internet available ${reset}"
-			echo "$user" >> $config_path/$online
-		else
-			echo -e "[◉] ${red} No internet conections ${reset}"
-		fi
+        echo -e "${purple} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${purple} $Routing_to ${reset}"
+        # Set the URL to ping
+        url=www.google.com
+        result=$(ping -c 3 "$url" > /dev/null && echo "Connected" || echo "Not Connected")
+        # Check the result
+        if [ "$result" = "Connected" ]; then
+            echo -e "${Yellow} [✔] ${reset} ${purple} Internet available ${reset}"
+            echo "$user" >> $config_path/$online
+        else
+            echo -e "${purple}[${reset}${red}＊${reset}${purple}]${reset} ${red} No internet conections ${reset}"
+        fi
+
+		# PING_TARGET="google.com"
+        # PING_RESULT=$(ping -c 1 "$PING_TARGET" 2>&1)
+        # #wget -q --tries=20 --timeout=10 --spider google.com
+		# if [[ $? -eq 0 ]]; then
+		# 	echo -e "${Yellow} [✔] ${reset} ${purple} Internet available ${reset}"
+		# 	echo "$user" >> $config_path/$online
+		# else
+		# 	echo -e "${purple}[${reset}${red}＊${reset}${purple}]${reset} ${red} No internet conections ${reset}"
+		# fi
     done < "$input"
 	echo -e "${Yellow} Would you like 2 set a live user from scanned [y/n] ${reset}"
 	read part2
@@ -141,7 +156,8 @@ wifi_spoof_tool(){
 			output=$(cat $config_path/$online | fzf)
 			get_interface
 			kill_wifi
-			sudo macchanger --mac=${output} $interface $>/dev/null
+			#sudo macchanger --mac=${output} $interface $>/dev/null
+            sudo ifconfig $interface hw ether $output
 			wake_wifi
 			echo -e "[✔] ${Yellow} Happy hacking if successfull ${reset}"
 		else
