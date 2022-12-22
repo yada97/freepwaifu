@@ -10,7 +10,6 @@ export purple='\033[1;35m'
 reset='\033[0m'
 #Dancing panda Variables
 export purple_panda='\033[6;35m'
-
 #configuration files & data files
 online="online_users.txt"
 total_users="allusers.txt"
@@ -18,7 +17,9 @@ complete_users="users.txt"
     #file paths shortened for no reason
 config_path="/tmp/freep"
 previous_config_path="/tmp/freep/freepcollections"
-#freepwaifu new logo\
+card_config="802-11-wireless.mac-address"
+
+#freepwaifu new logo
 function banner {
   local epic=$1
   local epic_say=$2
@@ -74,20 +75,19 @@ else
     drowsy_1 "1"
     clear
 fi   
-#Userfull functions
+# #Userfull functions
 get_interface(){
    interface=$(iw dev | awk '$1=="Interface"{print $2}') 
 }
 disable_wifi_iface(){
     #sudo ifconfig $interface down
-    nmcli radio wifi off
-    #nmcli d disconnect $interface &>/dev/null
-    
+    # nmcli radio wifi off
+    nmcli d disconnect $interface &>/dev/null  
 }
 enable_wifi_iface(){
     #sudo ifconfig $interface up
-    nmcli radio wifi on
-    #nmcli d connect $interface &>/dev/null
+    # nmcli radio wifi on
+    nmcli d connect $interface &>/dev/null
 }
 select_point(){
     if [[ -f $previous_config_path/$online ]]; then
@@ -116,14 +116,13 @@ wifi_spoof_tool(){
     while IFS= read -r user
     do
         get_interface
-        #disable_wifi_iface
-        nmcli radio wifi off
+        disable_wifi_iface
         drowsy_1 "3"
-        sudo macchanger -bm=${user} $interface &>/dev/null
+        #sudo macchanger -bm=${user} $interface &>/dev/null
+        nmcli connection modify $wifiname_1 $card_config "$user"
         drowsy_1 "3"
-        nmcli radio wifi on
-        #enable_wifi_iface
-        drowsy_1 "5"
+        enable_wifi_iface
+        drowsy_1 "3"
         nmcli d wifi connect "${wifiname_1}" &>/dev/null
         drowsy_1 "5"
         Routing_to=$(ip route show default | awk '/default/ {print $3}')
@@ -138,16 +137,6 @@ wifi_spoof_tool(){
         else
             echo -e "${purple}[${reset}${red}＊${reset}${purple}]${reset} ${red} No internet conections ${reset}"
         fi
-
-		# PING_TARGET="google.com"
-        # PING_RESULT=$(ping -c 1 "$PING_TARGET" 2>&1)
-        # #wget -q --tries=20 --timeout=10 --spider google.com
-		# if [[ $? -eq 0 ]]; then
-		# 	echo -e "${Yellow} [✔] ${reset} ${purple} Internet available ${reset}"
-		# 	echo "$user" >> $config_path/$online
-		# else
-		# 	echo -e "${purple}[${reset}${red}＊${reset}${purple}]${reset} ${red} No internet conections ${reset}"
-		# fi
     done < "$input"
 	echo -e "${Yellow} Would you like 2 set a live user from scanned [y/n] ${reset}"
 	read part2
