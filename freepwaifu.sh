@@ -17,8 +17,8 @@ complete_users="users.txt"
     #file paths shortened for no reason
 config_path="/tmp/freep"
 previous_config_path="/tmp/freep/freepcollections"
-card_config="802-11-wireless.mac-address"
-
+card_config="802-11-wireless.cloned-mac-address"
+#802-11-wireless.cloned-mac-address
 #freepwaifu new logo
 function banner {
   local epic=$1
@@ -81,13 +81,13 @@ get_interface(){
 }
 disable_wifi_iface(){
     #sudo ifconfig $interface down
-    # nmcli radio wifi off
-    nmcli d disconnect $interface &>/dev/null  
+    nmcli radio wifi off
+    #nmcli d disconnect $interface &>/dev/null  
 }
 enable_wifi_iface(){
     #sudo ifconfig $interface up
-    # nmcli radio wifi on
-    nmcli d connect $interface &>/dev/null
+    nmcli radio wifi on
+    #nmcli d connect $interface &>/dev/null
 }
 select_point(){
     if [[ -f $previous_config_path/$online ]]; then
@@ -116,15 +116,17 @@ wifi_spoof_tool(){
     while IFS= read -r user
     do
         get_interface
-        disable_wifi_iface
-        drowsy_1 "3"
+        #disable_wifi_iface
+        #drowsy_1 "3"
         #sudo macchanger -bm=${user} $interface &>/dev/null
-        nmcli connection modify $wifiname_1 $card_config "$user"
-        drowsy_1 "3"
+        nmcli connection modify "${wifiname_1}" $card_config "$user"
+	#drowsy_1 "2"
+	nmcli connection up "${wifiname_1}"
+        disable_wifi_iface
         enable_wifi_iface
-        drowsy_1 "3"
-        nmcli d wifi connect "${wifiname_1}" &>/dev/null
         drowsy_1 "5"
+        nmcli d wifi connect "${wifiname_1}" &>/dev/null
+        drowsy_1 "3"
         Routing_to=$(ip route show default | awk '/default/ {print $3}')
         echo -e "${purple} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${purple} $Routing_to ${reset}"
         # Set the URL to ping
