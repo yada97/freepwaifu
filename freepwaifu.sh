@@ -160,7 +160,7 @@ wifi_spoof_tool(){
 	else
 		exit
 	fi
-
+}
 clear
 epic="$purple"
 banner "$epic" "© Yada 2023 --Made with Love For Educational Purposes" 
@@ -179,13 +179,8 @@ case $poison in
 	1) wifi_spoof_tool ;;
 	2) select_point ;;
 	3)
-		rm -rf /tmp/freep
-		#sudo find "/tmp/" -type d -name "freep" -delete
-	;;
+		rm -rf /tmp/freep ;;
 	*)
 		echo "Invalid entry." >&2
 		exit 1
 esac
-
-
-
