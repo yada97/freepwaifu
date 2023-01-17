@@ -42,7 +42,7 @@ echo -e ${epic}"
 }
 
 epic="$purple_panda"
-banner="$epic" " * * * Loading.. * * *"
+banner "$epic" " * * * Loading.. * * *"
 
 #Temp file management 
 timestep=1
@@ -180,7 +180,7 @@ case $poison in
 	2) select_point ;;
 	3)
 		rm -rf /tmp/freep
-		sudo find "/tmp/" -type d -name "freep" -delete
+		#sudo find "/tmp/" -type d -name "freep" -delete
 	;;
 	*)
 		echo "Invalid entry." >&2
