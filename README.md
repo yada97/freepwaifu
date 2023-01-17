@@ -23,7 +23,7 @@ can be installed using your respective package manager apt/pacman/yum/dnf/snap e
 
 ## Installation & Running
 
-Install my-project with npm
+Install my-project with git
 
 ```bash
  git clone https://github.com/yadazora/freepwaifu
