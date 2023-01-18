@@ -110,6 +110,8 @@ select_point(){
 select_custom(){
 	echo -e "${Yellow} Enter custom path to mac address list Format(xx:xx:xx:xx:xx)-list Format /path/to/list -path....${reset}"
 	read path
+	echo -e "${Yellow} Enter Wifiname....${reset}"
+	read wifiname_1
 	while IFS= read -r user
 	do
 		get_interface
