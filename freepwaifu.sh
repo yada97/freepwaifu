@@ -196,7 +196,7 @@ Choose your Poison:
     1. Scan for live internet user
     2. Select live user from file
     3. Remove all alien life
-	4. Custom file list
+    4. Custom file list
     0. Quit
 EOF
 echo -n 'Enter selection [0-quit]: '
