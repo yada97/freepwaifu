@@ -114,10 +114,11 @@ select_custom(){
 	read wifiname_1
 	while IFS= read -r user
 	do
+		mac=$(echo $user | sed 's/ //g')
 		get_interface
-		nmcli connection modify "${wifiname_1}" $card_config "$user" &>/dev/null
+		nmcli connection modify "${wifiname_1}" $card_config "$mac"
 		drowsy_1 "$timeduck"
-		nmcli connection up "${wifiname_1}"
+		nmcli connection up "${wifiname_1}" &>/dev/null
 		drowsy_1 "$timeleap"
 		Routing_to=$(ip route show default | awk '/default/ {print $3}')
 		echo -e "${purple} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${purple} $Routing_to ${reset}"
@@ -144,6 +145,7 @@ wifi_spoof_tool(){
 	input="$config_path/$complete_users"
 	while IFS= read -r user
 	do
+		#mac=$(echo $user | sed 's/ //g')
 		get_interface
 		nmcli connection modify "${wifiname_1}" $card_config "$user" &>/dev/null
 		drowsy_1 "$timeduck"
