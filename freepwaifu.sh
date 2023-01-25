@@ -117,10 +117,7 @@ select_custom(){
 		get_interface
 		nmcli connection modify "${wifiname_1}" $card_config "$user" &>/dev/null
 		drowsy_1 "$timeduck"
-		disable_wifi_iface
-		enable_wifi_iface
-		drowsy_1 "$timeduck"
-		nmcli d wifi connect "${wifiname_1}" &>/dev/null
+		nmcli connection up "${wifiname_1}"
 		drowsy_1 "$timeleap"
 		Routing_to=$(ip route show default | awk '/default/ {print $3}')
 		echo -e "${purple} [~]${reset} Checking interent connectivity on ${Yellow} $user ${reset} ... Route:_ ${purple} $Routing_to ${reset}"
